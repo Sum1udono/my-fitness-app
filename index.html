@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sculpt & Sprint Daily</title>
+    <!-- Favicon for home screen icon (optional, but good for app feel) -->
+    <link rel="apple-touch-icon" href="https://placehold.co/180x180/000000/FFFFFF?text=SS">
+    <link rel="icon" href="https://placehold.co/32x32/000000/FFFFFF?text=SS">
+    <!-- Add these for PWA (Progressive Web App) feel on mobile -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sculpt & Sprint">
+    <meta name="theme-color" content="#4F46E5"> <!-- Matches indigo-600 -->
+
     <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts - Inter for consistent typography -->
@@ -16,9 +25,9 @@
 </head>
 <body>
     <!-- This div is where your React app will be "mounted" or rendered -->
-    <div id="root">
-        <!-- A fallback message in case React fails to load for some reason -->
-        Loading your fitness plan... If this message persists, there might be an issue.
+    <div id="root" class="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+        <!-- This message will show if the HTML loads but React doesn't -->
+        <p class="text-xl text-gray-700 font-semibold animate-pulse">Loading your fitness plan...</p>
     </div>
 
     <!-- This script tag is CRUCIAL. It tells the browser to process the content inside it
@@ -27,7 +36,9 @@
         // All your React App code goes here.
         // This includes imports, component definitions, and the final ReactDOM.render call.
 
-        import React, { useState, useEffect, useMemo } from 'react';
+        // Ensure React and ReactDOM are available globally before using them
+        const { useState, useEffect, useMemo } = React;
+        const ReactDOM = window.ReactDOM; // Access ReactDOM from the global window object
 
         // Helper function to format date as YYYY-MM-DD
         const formatDate = (date) => date.toISOString().split('T')[0];
@@ -236,7 +247,7 @@
                   3.  **Weider Lat Pulldowns (or Rows if available) (8-12 reps):** *How-to:* For pulldowns, sit facing the machine, grasp the bar/handles. Pull down towards your chest, squeezing shoulder blades together. Control the return. For rows, face the machine, pull handles towards your torso, squeezing shoulder blades. *Targets:* Back (lats, rhomboids), biceps.
 
                   Circuit 2 (2-3 sets, 45-60 sec rest between sets):
-                  1.  **Weider Shoulder Press (8-12 reps):** *How-to:* On the Weider, position yourself for shoulder press (usually sitting or standing). Push handles overhead, extending arms, engaging shoulder muscles. Control the return. *Targets:* Shoulders (deltoids), triceps.
+                  1.  **Triceps Dips (using a sturdy chair) (8-12 reps):** *How-to:* Sit on edge of chair, hands grasping edge next to hips, fingers pointing forward. Slide hips off chair, supporting weight with arms. Bend elbows, lowering body until upper arms are parallel to floor. Push back up. *Targets:* Triceps.
                   2.  **Weider Bicep Curls (8-12 reps):** *How-to:* Position yourself to isolate biceps. Curl handles towards your shoulders, squeezing biceps. Control the return. *Targets:* Biceps.
                   3.  **Weider Triceps Extensions (8-12 reps):** *How-to:* On the Weider, set up for triceps extensions (e.g., overhead or pushdown style). Extend arms fully, feeling the squeeze in triceps. Control the return. *Targets:* Triceps.
                   4.  **Plank (45-60 sec hold):** *How-to:* Start on forearms and toes. Keep body in a straight line from head to heels. Engage core, don\\'t let hips sag or pike up. *Targets:* Entire core (abs, obliques, lower back).
@@ -727,9 +738,6 @@
 
           return (
             <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 p-4 sm:p-6 font-sans text-gray-800 flex flex-col items-center">
-              <script src="https://cdn.tailwindcss.com"></script>
-              <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-
               <style>{`
                 body { font-family: 'Inter', sans-serif; }
                 /* Custom scrollbar for detail modal */
