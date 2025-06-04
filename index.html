@@ -15,12 +15,17 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
-    <div id="root"></div> <!-- This is where your React app will be "mounted" -->
+    <!-- This div is where your React app will be "mounted" or rendered -->
+    <div id="root">
+        <!-- A fallback message in case React fails to load for some reason -->
+        Loading your fitness plan... If this message persists, there might be an issue.
+    </div>
 
-    <!-- This script tag tells the browser to treat the content as Babel/JSX, not plain JavaScript -->
+    <!-- This script tag is CRUCIAL. It tells the browser to process the content inside it
+         as JSX (React's special syntax) using Babel. -->
     <script type="text/babel">
-        // This is your React App code. It will run in the browser.
-        // All your app's logic, components, and data are here.
+        // All your React App code goes here.
+        // This includes imports, component definitions, and the final ReactDOM.render call.
 
         import React, { useState, useEffect, useMemo } from 'react';
 
@@ -43,7 +48,7 @@
                 id: 'M1B', type: 'Meal', name: 'Voluminous Berry Oatmeal',
                 details: {
                   ingredients: '1/2 cup dry rolled oats, 1 cup frozen mixed berries, 1 tbsp natural peanut butter, Water or unsweetened dairy milk (skim/low-fat) for cooking.',
-                  prep: '1. In a saucepan, combine oats with 1-1.5 cups water or dairy milk. Bring to a simmer.\n2. Add frozen mixed berries. Cook for 5-7 minutes, stirring occasionally, until oats are creamy and berries have softened.\n3. Remove from heat, stir in peanut butter until melted and combined. Serve warm.',
+                  prep: '1. In a saucepan, combine oats with 1-1.5 cups water or dairy milk. Bring to a simmer.\\n2. Add frozen mixed berries. Cook for 5-7 minutes, stirring occasionally, until oats are creamy and berries have softened.\\n3. Remove from heat, stir in peanut butter until melted and combined. Serve warm.',
                   notes: 'Great for fiber and lasting fullness.'
                 }
               },
@@ -51,7 +56,7 @@
                 id: 'M1L', type: 'Meal', name: 'Giant Tuna & Veggie Mountain Salad',
                 details: {
                   ingredients: 'Unlimited mixed greens (spinach, lettuce, kale), 1 can (5oz) tuna in water (drained), 1.5 cups chopped cucumber, 1 cup shredded carrots, 1/2 cup canned chickpeas (rinsed and drained). 1 tbsp olive oil, 2 tbsp apple cider vinegar (or other vinegar), Salt and pepper to taste.',
-                  prep: '1. In a large bowl, combine mixed greens, tuna, cucumber, shredded carrots, and chickpeas.\n2. In a small bowl, whisk together olive oil, apple cider vinegar, salt, and pepper to make a dressing.\n3. Pour dressing over the salad and toss gently to combine. Eat a very large portion!',
+                  prep: '1. In a large bowl, combine mixed greens, tuna, cucumber, shredded carrots, and chickpeas.\\n2. In a small bowl, whisk together olive oil, apple cider vinegar, salt, and pepper to make a dressing.\\n3. Pour dressing over the salad and toss gently to combine. Eat a very large portion!',
                   notes: 'Focus on cheaper, high-volume veggies like cucumber and carrots. Load up!'
                 }
               },
@@ -59,7 +64,7 @@
                 id: 'M1S', type: 'Meal', name: 'Mega Veggie Sticks',
                 details: {
                   ingredients: '2 cups mixed raw veggies (e.g., celery sticks, baby carrots, bell pepper strips), 2 tbsp hummus.',
-                  prep: '1. Wash and cut vegetables into sticks or florets.\n2. Serve with hummus for dipping.',
+                  prep: '1. Wash and cut vegetables into sticks or florets.\\n2. Serve with hummus for dipping.',
                   notes: 'High volume, low calorie, excellent for managing hunger between meals. Prioritize carrots and celery for cost.'
                 }
               },
@@ -67,7 +72,7 @@
                 id: 'M1D', type: 'Meal', name: 'Lean Turkey & Frozen Veggie Skillet',
                 details: {
                   ingredients: '4 oz lean ground turkey (93% lean or higher), 4 cups chopped frozen mixed vegetables (e.g., broccoli, cauliflower, green beans, peas), 1/2 onion (chopped), 1 clove garlic (minced), 1 tsp olive oil, Salt, pepper, garlic powder, onion powder, paprika to taste. Served with 1/2 cup cooked brown rice.',
-                  prep: '1. Heat olive oil in a large skillet over medium-high heat. Add ground turkey and onion, cook until turkey is browned, breaking it apart with a spoon.\n2. Drain any excess fat. Add minced garlic and stir for 1 minute until fragrant.\n3. Add frozen mixed vegetables and seasonings. Stir well. Cover and cook for 8-10 minutes, stirring occasionally, until vegetables are tender-crisp.\n4. Serve a generous portion of the turkey and veggie mix over 1/2 cup cooked brown rice.',
+                  prep: '1. Heat olive oil in a large skillet over medium-high heat. Add ground turkey and onion, cook until turkey is browned, breaking it apart with a spoon.\\n2. Drain any excess fat. Add minced garlic and stir for 1 minute until fragrant.\\n3. Add frozen mixed vegetables and seasonings. Stir well. Cover and cook for 8-10 minutes, stirring occasionally, until vegetables are tender-crisp.\\n4. Serve a generous portion of the turkey and veggie mix over 1/2 cup cooked brown rice.',
                   notes: 'Make extra for tomorrow\'s lunch! Rely heavily on cost-effective frozen veggies.'
                 }
               },
@@ -90,7 +95,7 @@
                 id: 'T2B', type: 'Meal', name: 'Filling Egg & Spinach Scramble',
                 details: {
                   ingredients: '2 large eggs, 2 cups fresh spinach (or 1 cup frozen), 1 tsp olive oil, Salt and pepper to taste. Served with 1 slice whole-wheat toast.',
-                  prep: '1. Heat olive oil in a non-stick skillet over medium heat. Add spinach and cook until wilted (if using fresh) or heated through (if frozen).\n2. In a bowl, whisk eggs with salt and pepper. Pour over spinach in the skillet.\n3. Scramble gently until cooked through. Serve immediately with whole-wheat toast.',
+                  prep: '1. Heat olive oil in a non-stick skillet over medium heat. Add spinach and cook until wilted (if using fresh) or heated through (if frozen).\\n2. In a bowl, whisk eggs with salt and pepper. Pour over spinach in the skillet.\\n3. Scramble gently until cooked through. Serve immediately with whole-wheat toast.',
                   notes: 'Spinach cooks down a lot, so 2 cups fresh is a good volume. Frozen spinach is a budget-friendly option.'
                 }
               },
@@ -114,7 +119,7 @@
                 id: 'T2D', type: 'Meal', name: 'Hearty Lentil & Veggie Soup (Massive Bowl)',
                 details: {
                   ingredients: '1 cup dried brown or green lentils (rinsed), 6-8 cups low-sodium vegetable broth, 1 large onion (chopped), 2 carrots (chopped), 2 celery stalks (chopped), 1 (14.5oz) can diced tomatoes (undrained), 2 cups packed fresh spinach or kale (chopped), 1 tsp olive oil, 1 tsp dried thyme, 1 tsp dried oregano, Salt and pepper to taste.',
-                  prep: '1. Heat olive oil in a large pot or Dutch oven over medium heat. Add onion, carrots, and celery. Sauté for 5-7 minutes until softened.\n2. Add rinsed lentils, vegetable broth, diced tomatoes, thyme, and oregano. Bring to a boil, then reduce heat to low, cover, and simmer for 25-30 minutes, or until lentils are tender.\n3. Stir in spinach/kale until wilted. Season with salt and pepper. Serve a very generous 2-cup portion.',
+                  prep: '1. Heat olive oil in a large pot or Dutch oven over medium heat. Add onion, carrots, and celery. Sauté for 5-7 minutes until softened.\\n2. Add rinsed lentils, vegetable broth, diced tomatoes, thyme, and oregano. Bring to a boil, then reduce heat to low, cover, and simmer for 25-30 minutes, or until lentils are tender.\\n3. Stir in spinach/kale until wilted. Season with salt and pepper. Serve a very generous 2-cup portion.',
                   notes: 'Make a large batch (double or triple) to last for multiple meals throughout the week. Dried lentils are incredibly cheap and filling.'
                 }
               },
@@ -130,7 +135,7 @@
                   Circuit 2 (2-3 sets, 45-60 sec rest between sets):
                   1.  **Triceps Dips (using a sturdy chair) (8-12 reps):** *How-to:* Sit on edge of chair, hands grasping edge next to hips, fingers pointing forward. Slide hips off chair, supporting weight with arms. Bend elbows, lowering body until upper arms are parallel to floor. Push back up. *Targets:* Triceps.
                   2.  **Weider Bicep Curls (8-12 reps):** *How-to:* Position yourself to isolate biceps. Curl handles towards your shoulders, squeezing biceps. Control the return. *Targets:* Biceps.
-                  3.  **Plank (45-60 sec hold):** *How-to:* Start on forearms and toes. Keep body in a straight line from head to heels. Engage core, don\'t let hips sag or pike up. *Targets:* Entire core (abs, obliques, lower back).
+                  3.  **Plank (45-60 sec hold):** *How-to:* Start on forearms and toes. Keep body in a straight line from head to heels. Engage core, don\\'t let hips sag or pike up. *Targets:* Entire core (abs, obliques, lower back).
                   4.  **Ab Roller (8-12 challenging reps):** *How-to:* Kneel on floor, grasp ab roller handles. Slowly roll the wheel forward, extending your body, keeping core tight and back flat. Roll back to start using your core. *Targets:* Abs, obliques, lower back, shoulders.`,
                   coolDown: '5 mins static stretches: Hold each stretch for 20-30 seconds. Focus on chest, back, shoulders, quads, hamstrings, glutes.',
                   notes: 'Focus on form over speed. Push for muscle fatigue on last reps.'
@@ -146,7 +151,7 @@
                 id: 'W3B', type: 'Meal', name: 'Berry & Nutty Greek Yogurt',
                 details: {
                   ingredients: '1/2 cup plain Greek yogurt (0% or 2% fat), 1/2 cup frozen mixed berries, 1/4 cup raw almonds (whole or chopped).',
-                  prep: '1. Combine Greek yogurt and frozen berries in a bowl. The frozen berries will help cool and thicken the yogurt.\n2. Sprinkle almonds on top. Serve immediately.',
+                  prep: '1. Combine Greek yogurt and frozen berries in a bowl. The frozen berries will help cool and thicken the yogurt.\\n2. Sprinkle almonds on top. Serve immediately.',
                   notes: 'Great source of protein and healthy fats. Greek yogurt is very high in protein for its calories.'
                 }
               },
@@ -154,7 +159,7 @@
                 id: 'W3L', type: 'Meal', name: 'Crunchy Tuna & Veggie Lettuce Wraps',
                 details: {
                   ingredients: '1 can (5oz) tuna in water (drained), 1.5 cups shredded cabbage, 1 cup shredded carrots, 1/4 cup chopped green onion, 1 tbsp light mayonnaise or plain Greek yogurt, Salt and pepper to taste. Unlimited large lettuce cups (e.g., iceberg, romaine).',
-                  prep: '1. In a bowl, flake drained tuna. Add shredded cabbage, carrots, green onion, light mayo/Greek yogurt, salt, and pepper. Mix well.\n2. Spoon mixture into large lettuce cups and wrap up. Eat as many lettuce wraps as you need to feel full.',
+                  prep: '1. In a bowl, flake drained tuna. Add shredded cabbage, carrots, green onion, light mayo/Greek yogurt, salt, and pepper. Mix well.\\n2. Spoon mixture into large lettuce cups and wrap up. Eat as many lettuce wraps as you need to feel full.',
                   notes: 'Cabbage and carrots are very inexpensive and provide great crunch and volume.'
                 }
               },
@@ -170,7 +175,7 @@
                 id: 'W3D', type: 'Meal', name: 'Chicken Breast with Steamed & Roasted Veggies',
                 details: {
                   ingredients: '4 oz baked chicken breast (skinless), 2 cups steamed broccoli florets, 2 cups roasted zucchini and bell peppers (chopped), 1 tsp olive oil, Salt, pepper, garlic powder, onion powder to taste. Served with 1/2 cup cooked quinoa.',
-                  prep: '1. Preheat oven to 400°F (200°C). Toss chopped zucchini and bell peppers with 1 tsp olive oil, salt, pepper, garlic powder, and onion powder on a baking sheet. Roast for 15-20 minutes until tender and slightly caramelized.\n2. Meanwhile, steam broccoli until tender-crisp.\n3. Bake chicken breast until cooked through (internal temp 165°F/74°C), season with salt and pepper.\n4. Serve chicken with generous portions of steamed broccoli and roasted vegetables, alongside 1/2 cup cooked quinoa.',
+                  prep: '1. Preheat oven to 400°F (200°C). Toss chopped zucchini and bell peppers with 1 tsp olive oil, salt, pepper, garlic powder, and onion powder on a baking sheet. Roast for 15-20 minutes until tender and slightly caramelized.\\n2. Meanwhile, steam broccoli until tender-crisp.\\n3. Bake chicken breast until cooked through (internal temp 165°F/74°C), season with salt and pepper.\\n4. Serve chicken with generous portions of steamed broccoli and roasted vegetables, alongside 1/2 cup cooked quinoa.',
                   notes: 'A classic lean protein and veggie combo. Quinoa provides complete protein and fiber. Adjust fresh veggie quantities based on sales.'
                 }
               },
@@ -193,7 +198,7 @@
                 id: 'Th4B', type: 'Meal', name: 'Peach & Chia Seed Oatmeal',
                 details: {
                   ingredients: '1/2 cup dry rolled oats, 1/2 cup frozen sliced peaches, 1 tbsp chia seeds, Water or unsweetened dairy milk (skim/low-fat) for cooking.',
-                  prep: '1. In a saucepan, combine oats with 1-1.5 cups water or dairy milk. Bring to a simmer.\n2. Add frozen peaches and chia seeds. Cook for 5-7 minutes, stirring occasionally, until oats are creamy and peaches have softened.\n3. Serve warm.',
+                  prep: '1. In a saucepan, combine oats with 1-1.5 cups water or dairy milk. Bring to a simmer.\\n2. Add frozen peaches and chia seeds. Cook for 5-7 minutes, stirring occasionally, until oats are creamy and peaches have softened.\\n3. Serve warm.',
                   notes: 'Chia seeds add extra fiber and omega-3s, helping with satiety.'
                 }
               },
@@ -209,7 +214,7 @@
                 id: 'Th4S', type: 'Meal', name: 'Air-Popped Popcorn',
                 details: {
                   ingredients: '1 cup air-popped popcorn (approx. 2 tbsp unpopped kernels), light salt to taste, no butter.',
-                  prep: '1. Use an air popper or a large pot with a lid (no oil needed for air popping).\n2. Pop kernels until all are popped. Season with light salt.',
+                  prep: '1. Use an air popper or a large pot with a lid (no oil needed for air popping).\\n2. Pop kernels until all are popped. Season with light salt.',
                   notes: 'Fantastic high-volume snack, very low in calories per cup. Avoid added butter or heavy oils. Very budget-friendly.'
                 }
               },
@@ -217,7 +222,7 @@
                 id: 'Th4D', type: 'Meal', name: 'Lean Turkey & Frozen Vegetable Stir-fry',
                 details: {
                   ingredients: '4 oz lean ground turkey or chicken breast strips, 4 cups frozen mixed stir-fry vegetables, 1 tbsp low-sodium soy sauce or tamari, 1 tsp grated fresh ginger, 1 clove garlic (minced), 1 tsp sesame oil (optional, for flavor), 1/2 cup cooked brown rice.',
-                  prep: '1. Heat a large non-stick skillet or wok over medium-high heat. Add turkey/chicken and cook until browned, breaking it apart (if ground) or cooked through (if strips).\n2. Drain any excess fat. Add garlic and ginger, stir for 30 seconds until fragrant.\n3. Add frozen mixed stir-fry vegetables. Cook for 5-7 minutes, stirring frequently, until vegetables are tender-crisp.\n4. Stir in soy sauce/tamari and sesame oil (if using). Cook for another 1-2 minutes until everything is well combined and heated through.\n5. Serve a generous portion over 1/2 cup cooked brown rice.',
+                  prep: '1. Heat a large non-stick skillet or wok over medium-high heat. Add turkey/chicken and cook until browned, breaking it apart (if ground) or cooked through (if strips).\\n2. Drain any excess fat. Add garlic and ginger, stir for 30 seconds until fragrant.\\n3. Add frozen mixed stir-fry vegetables. Cook for 5-7 minutes, stirring frequently, until vegetables are tender-crisp.\\n4. Stir in soy sauce/tamari and sesame oil (if using). Cook for another 1-2 minutes until everything is well combined and heated through.\\n5. Serve a generous portion over 1/2 cup cooked brown rice.',
                   notes: 'Frozen stir-fry mixes are very convenient and cost-effective for high veggie volume.'
                 }
               },
@@ -234,7 +239,7 @@
                   1.  **Weider Shoulder Press (8-12 reps):** *How-to:* On the Weider, position yourself for shoulder press (usually sitting or standing). Push handles overhead, extending arms, engaging shoulder muscles. Control the return. *Targets:* Shoulders (deltoids), triceps.
                   2.  **Weider Bicep Curls (8-12 reps):** *How-to:* Position yourself to isolate biceps. Curl handles towards your shoulders, squeezing biceps. Control the return. *Targets:* Biceps.
                   3.  **Weider Triceps Extensions (8-12 reps):** *How-to:* On the Weider, set up for triceps extensions (e.g., overhead or pushdown style). Extend arms fully, feeling the squeeze in triceps. Control the return. *Targets:* Triceps.
-                  4.  **Plank (45-60 sec hold):** *How-to:* Start on forearms and toes. Keep body in a straight line from head to heels. Engage core, don\'t let hips sag or pike up. *Targets:* Entire core (abs, obliques, lower back).
+                  4.  **Plank (45-60 sec hold):** *How-to:* Start on forearms and toes. Keep body in a straight line from head to heels. Engage core, don\\'t let hips sag or pike up. *Targets:* Entire core (abs, obliques, lower back).
                   5.  **Ab Roller (8-12 challenging reps):** *How-to:* Kneel on floor, grasp ab roller handles. Slowly roll the wheel forward, extending your body, keeping core tight and back flat. Roll back to start using your core. *Targets:* Abs, obliques, lower back, shoulders.`,
                   coolDown: '5 mins static stretches: Hold each stretch for 20-30 seconds. Focus on chest, back, shoulders, quads, hamstrings, glutes.',
                   notes: 'Try to increase reps or resistance from Tuesday if possible. Consistent challenge is key for muscle definition.'
@@ -250,7 +255,7 @@
                 id: 'F5B', type: 'Meal', name: 'Savory Egg & Bean Scramble',
                 details: {
                   ingredients: '2 large eggs, 1/2 cup canned black beans (rinsed and drained), 1/2 cup salsa, Salt, pepper, and a sprinkle of chili powder to taste.',
-                  prep: '1. In a non-stick skillet, scramble eggs. When almost cooked, stir in rinsed black beans, salsa, chili powder, salt, and pepper.\n2. Cook for another 1-2 minutes until heated through and well combined.',
+                  prep: '1. In a non-stick skillet, scramble eggs. When almost cooked, stir in rinsed black beans, salsa, chili powder, salt, and pepper.\\n2. Cook for another 1-2 minutes until heated through and well combined.',
                   notes: 'A quick and savory breakfast packed with protein and fiber.'
                 }
               },
@@ -258,7 +263,7 @@
                 id: 'F5L', type: 'Meal', name: 'Massive Veggie & Hummus Plate',
                 details: {
                   ingredients: 'Unlimited raw veggies (e.g., carrots, celery sticks, bell pepper strips, cucumber slices), 1/2 cup hummus, 1 hard-boiled egg.',
-                  prep: '1. Arrange a large platter with a variety of raw vegetables.\n2. Place hummus in a small bowl in the center. Slice or halve the hard-boiled egg and add to the plate.',
+                  prep: '1. Arrange a large platter with a variety of raw vegetables.\\n2. Place hummus in a small bowl in the center. Slice or halve the hard-boiled egg and add to the plate.',
                   notes: 'Focus on consuming a huge volume of raw vegetables. They are incredibly low in calories but very filling. Carrots and celery are cheap and filling.'
                 }
               },
@@ -266,7 +271,7 @@
                 id: 'F5S', type: 'Meal', name: 'Apple & Steamed Green Beans',
                 details: {
                   ingredients: '1 medium apple, 1 cup steamed green beans.',
-                  prep: '1. Wash and slice apple. Steam green beans until tender-crisp.\n2. Serve together.',
+                  prep: '1. Wash and slice apple. Steam green beans until tender-crisp.\\n2. Serve together.',
                   notes: 'Unusual combo but great for fiber and volume!'
                 }
               },
@@ -274,7 +279,7 @@
                 id: 'F5D', type: 'Meal', name: 'Baked Chicken Breast with Steamed Greens & Potato',
                 details: {
                   ingredients: '4 oz chicken breast (skinless), 3-4 cups mixed greens (spinach, kale, or collard greens), 1 tsp olive oil, 1 clove garlic (minced), Lemon wedge, Salt, pepper, paprika to taste. Served with 1 small baked potato (approx. 4-5 oz/medium).',
-                  prep: '1. Preheat oven to 400°F (200°C). Season chicken with salt, pepper, and paprika. Place on a baking sheet and bake for 20-25 minutes, or until cooked through (internal temp 165°F/74°C).\n2. While chicken bakes, heat olive oil in a large skillet. Add minced garlic and sauté for 30 seconds until fragrant. Add mixed greens in batches if necessary, and cook until wilted.\n3. Serve baked chicken with a generous portion of super greens and the baked potato. Squeeze fresh lemon over chicken and greens.',
+                  prep: '1. Preheat oven to 400°F (200°C). Season chicken with salt, pepper, and paprika. Place on a baking sheet and bake for 20-25 minutes, or until cooked through (internal temp 165°F/74°C).\\n2. While chicken bakes, heat olive oil in a large skillet. Add minced garlic and sauté for 30 seconds until fragrant. Add mixed greens in batches if necessary, and cook until wilted.\\n3. Serve baked chicken with a generous portion of super greens and the baked potato. Squeeze fresh lemon over chicken and greens.',
                   notes: 'Greens cook down significantly, so 3-4 cups raw will be a substantial cooked portion. Potatoes are a very budget-friendly carb source.'
                 }
               },
@@ -313,7 +318,7 @@
                 id: 'Sa6B', type: 'Meal', name: 'Fruity Greek Yogurt & Nuts',
                 details: {
                   ingredients: '1/2 cup plain Greek yogurt (0% or 2% fat), 1/2 cup frozen mixed fruit, 1 tbsp sunflower seeds.',
-                  prep: '1. Combine Greek yogurt and frozen fruit in a bowl.\n2. Sprinkle sunflower seeds on top. Serve immediately.',
+                  prep: '1. Combine Greek yogurt and frozen fruit in a bowl.\\n2. Sprinkle sunflower seeds on top. Serve immediately.',
                   notes: 'Sunflower seeds add a nice crunch and healthy fats.'
                 }
               },
@@ -329,7 +334,7 @@
                 id: 'Sa6S', type: 'Meal', name: 'Baby Carrots & Greek Yogurt Dip',
                 details: {
                   ingredients: '1 cup baby carrots, 1/4 cup plain Greek yogurt (0% or 2% fat), Pinch of salt, garlic powder, onion powder (optional).',
-                  prep: '1. In a small bowl, stir together Greek yogurt with a pinch of salt and optional seasonings.\n2. Serve with baby carrots for dipping.',
+                  prep: '1. In a small bowl, stir together Greek yogurt with a pinch of salt and optional seasonings.\\n2. Serve with baby carrots for dipping.',
                   notes: 'A crunchy and satisfying protein-rich snack. Very inexpensive.'
                 }
               },
@@ -337,7 +342,7 @@
                 id: 'Sa6D', type: 'Meal', name: 'Chicken & Veggie Noodle Bowl (Controlled)',
                 details: {
                   ingredients: '4 oz shredded cooked chicken breast, 3 cups mixed, thinly sliced or spiralized vegetables (e.g., zucchini, carrots, cabbage, mushrooms), 1/2 cup cooked whole wheat noodles, 1 cup low-sodium chicken broth, 1 tbsp low-sodium soy sauce or tamari, 1 tsp grated fresh ginger (optional), 1 clove garlic (minced, optional).',
-                  prep: '1. In a pot, heat chicken broth. Add minced garlic and ginger (if using). Bring to a simmer.\n2. Add sliced vegetables and cook for 3-5 minutes until tender-crisp.\n3. Add cooked chicken and cooked whole wheat noodles. Stir in soy sauce/tamari. Heat through.\n4. Serve hot in a large bowl.',
+                  prep: '1. In a pot, heat chicken broth. Add minced garlic and ginger (if using). Bring to a simmer.\\n2. Add sliced vegetables and cook for 3-5 minutes until tender-crisp.\\n3. Add cooked chicken and cooked whole wheat noodles. Stir in soy sauce/tamari. Heat through.\\n4. Serve hot in a large bowl.',
                   notes: 'Control noodle portion for calorie management. The broth and veggies provide the bulk. Utilize cheaper veggies like cabbage and carrots.'
                 }
               },
@@ -346,7 +351,7 @@
                 details: {
                   warmUp: '5 mins light walking or dynamic stretches.',
                   workout: `**Long Walk (45-60 mins):**
-                  * **How-to:** Go for a brisk walk outdoors. Focus on a steady pace that keeps your heart rate slightly elevated but doesn\'t feel like intense exercise. This is for recovery and light calorie burn.
+                  * **How-to:** Go for a brisk walk outdoors. Focus on a steady pace that keeps your heart rate slightly elevated but doesn\\'t feel like intense exercise. This is for recovery and light calorie burn.
                   * **Targets:** Cardiovascular health, circulation, mental de-stress.
 
                   **Stretching & Inversion Table (20-30 mins):**
@@ -356,7 +361,7 @@
                           * **Back Extension:** Lie on your back over the ball, letting your spine gently extend.
                           * **Hip Flexor Stretch:** Kneel with one foot on the ball, gently lean forward.
                       * **Other Stretches:** Deep quad stretch, hamstring stretch, glute stretch (e.g., figure-4), chest stretch (arms wide against a doorframe). Hold each for 20-30 seconds.
-                  * **Couples Yoga (Optional Addition):** If you can convince your wife, this is a fantastic way to add flexibility, balance, and mental well-being. It fits perfectly on this active recovery day, either in place of some stretching or as an additional session. It\'s great for joint health and stress reduction.
+                  * **Couples Yoga (Optional Addition):** If you can convince your wife, this is a fantastic way to add flexibility, balance, and mental well-being. It fits perfectly on this active recovery day, either in place of some stretching or as an additional session. It\\'s great for joint health and stress reduction.
                   * **Targets:** Flexibility, range of motion, recovery, muscle soreness relief, spinal health.`,
                   coolDown: 'Focus on relaxation and breathing throughout stretching.',
                   notes: 'This is your active rest day. Enjoy the movement and focus on recovery. Essential after a week of hard work and a demanding job.'
@@ -372,7 +377,7 @@
                 id: 'Su7B', type: 'Meal', name: 'Apple & Cinnamon Oatmeal',
                 details: {
                   ingredients: '1/2 cup dry rolled oats, 1/4 cup chopped apple, 1 tsp cinnamon, Water or unsweetened dairy milk (skim/low-fat) for cooking.',
-                  prep: '1. In a saucepan, combine oats with 1-1.5 cups water or dairy milk. Bring to a simmer.\n2. Stir in chopped apple and cinnamon. Cook for 5-7 minutes until oats are creamy and apple is tender.\n3. Serve warm.',
+                  prep: '1. In a saucepan, combine oats with 1-1.5 cups water or dairy milk. Bring to a simmer.\\n2. Stir in chopped apple and cinnamon. Cook for 5-7 minutes until oats are creamy and apple is tender.\\n3. Serve warm.',
                   notes: 'Simple, comforting, and packed with fiber.'
                 }
               },
@@ -380,7 +385,7 @@
                 id: 'Su7L', type: 'Meal', name: 'Giant "Clean Out the Fridge" Salad/Bowl',
                 details: {
                   ingredients: 'Unlimited mixed greens/raw veggies (use whatever fresh veggies you have left), Any leftover cooked lean protein (e.g., chicken, tuna, beans), 1/2 cup cooked brown rice or quinoa (optional), 1-2 tbsp light vinaigrette (or olive oil & vinegar).',
-                  prep: '1. Combine all available greens, raw veggies, and cooked protein in a large bowl.\n2. Add cooked grain if desired.\n3. Dress with vinaigrette and toss.',
+                  prep: '1. Combine all available greens, raw veggies, and cooked protein in a large bowl.\\n2. Add cooked grain if desired.\\n3. Dress with vinaigrette and toss.',
                   notes: 'A great way to use up leftovers and prevent food waste. Maximize veggie volume!'
                 }
               },
@@ -396,7 +401,7 @@
                 id: 'Su7D', type: 'Meal', name: 'Voluminous Chicken & Vegetable Soup',
                 details: {
                   ingredients: '4 oz shredded cooked chicken breast, 3 cups mixed budget-friendly vegetables (e.g., celery, carrots, frozen peas, frozen corn, cabbage, green beans), 4-5 cups low-sodium chicken broth, 1/2 onion (chopped), Salt and pepper to taste, Fresh herbs (e.g., parsley) for garnish (optional).',
-                  prep: '1. In a large pot, combine chicken broth, chopped onion, carrots, and celery. Bring to a boil, then reduce heat and simmer for 10-15 minutes until vegetables are tender-crisp.\n2. Add shredded cooked chicken and frozen peas/corn. Cook for another 5 minutes until heated through.\n3. Season with salt and pepper. Serve a very large 2-3 cup portion, garnished with fresh herbs if desired.',
+                  prep: '1. In a large pot, combine chicken broth, chopped onion, carrots, and celery. Bring to a boil, then reduce heat and simmer for 10-15 minutes until vegetables are tender-crisp.\\n2. Add shredded cooked chicken and frozen peas/corn. Cook for another 5 minutes until heated through.\\n3. Season with salt and pepper. Serve a very large 2-3 cup portion, garnished with fresh herbs if desired.',
                   notes: 'Excellent for batch cooking for future meals. Very high volume and comforting. Focus on cheaper frozen veggies and root vegetables.'
                 }
               },
@@ -1005,7 +1010,9 @@
           );
         }
 
-        export default App;
+        // This line is essential: It tells React to render your App component
+        // into the HTML element with the ID "root".
+        ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
 </html>
