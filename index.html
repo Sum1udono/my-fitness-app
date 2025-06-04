@@ -4,20 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sculpt & Sprint Daily</title>
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Inter -->
+    <!-- Google Fonts - Inter for consistent typography -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- React and ReactDOM CDNs -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<!-- Babel for JSX transformation in browser -->
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- React and ReactDOM CDNs - These are essential for React to run in the browser -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX transformation - This allows the browser to understand React's special syntax -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel">
-  import React, { useState, useEffect, useMemo } from 'react';
+    <div id="root"></div> <!-- This is where your React app will be "mounted" -->
+
+    <!-- This script tag tells the browser to treat the content as Babel/JSX, not plain JavaScript -->
+    <script type="text/babel">
+        // This is your React App code. It will run in the browser.
+        // All your app's logic, components, and data are here.
+
+        import React, { useState, useEffect, useMemo } from 'react';
 
         // Helper function to format date as YYYY-MM-DD
         const formatDate = (date) => date.toISOString().split('T')[0];
@@ -121,7 +126,7 @@
                   1.  **Weider Squats/Leg Press (10-15 reps):** *How-to:* On the Weider, set up for squats or leg press. Lower your body by bending your knees and hips, keeping your back straight and chest up, as if sitting in a chair. Push through your heels to return to start. *Targets:* Quads, hamstrings, glutes.
                   2.  **Weider Chest Press (8-12 reps):** *How-to:* Lie on the bench, grip the handles. Push handles away from your chest, extending arms. Control the return. *Targets:* Chest (pectorals), shoulders (deltoids), triceps.
                   3.  **Weider Lat Pulldowns (or Rows if available) (8-12 reps):** *How-to:* For pulldowns, sit facing the machine, grasp the bar/handles. Pull down towards your chest, squeezing shoulder blades together. Control the return. For rows, face the machine, pull handles towards your torso, squeezing shoulder blades. *Targets:* Back (lats, rhomboids), biceps.
-                  
+
                   Circuit 2 (2-3 sets, 45-60 sec rest between sets):
                   1.  **Triceps Dips (using a sturdy chair) (8-12 reps):** *How-to:* Sit on edge of chair, hands grasping edge next to hips, fingers pointing forward. Slide hips off chair, supporting weight with arms. Bend elbows, lowering body until upper arms are parallel to floor. Push back up. *Targets:* Triceps.
                   2.  **Weider Bicep Curls (8-12 reps):** *How-to:* Position yourself to isolate biceps. Curl handles towards your shoulders, squeezing biceps. Control the return. *Targets:* Biceps.
@@ -224,7 +229,7 @@
                   1.  **Weider Squats/Leg Press (10-15 reps):** *How-to:* On the Weider, set up for squats or leg press. Lower your body by bending your knees and hips, keeping your back straight and chest up, as if sitting in a chair. Push through your heels to return to start. *Targets:* Quads, hamstrings, glutes.
                   2.  **Weider Chest Press (8-12 reps):** *How-to:* Lie on the bench, grip the handles. Push handles away from your chest, extending arms. Control the return. *Targets:* Chest (pectorals), shoulders (deltoids), triceps.
                   3.  **Weider Lat Pulldowns (or Rows if available) (8-12 reps):** *How-to:* For pulldowns, sit facing the machine, grasp the bar/handles. Pull down towards your chest, squeezing shoulder blades together. Control the return. For rows, face the machine, pull handles towards your torso, squeezing shoulder blades. *Targets:* Back (lats, rhomboids), biceps.
-                  
+
                   Circuit 2 (2-3 sets, 45-60 sec rest between sets):
                   1.  **Weider Shoulder Press (8-12 reps):** *How-to:* On the Weider, position yourself for shoulder press (usually sitting or standing). Push handles overhead, extending arms, engaging shoulder muscles. Control the return. *Targets:* Shoulders (deltoids), triceps.
                   2.  **Weider Bicep Curls (8-12 reps):** *How-to:* Position yourself to isolate biceps. Curl handles towards your shoulders, squeezing biceps. Control the return. *Targets:* Biceps.
@@ -280,7 +285,7 @@
                   workout: `**Option 1: Zombie 5K Run Training (Week 1, Day 3)**
                   * **How-to:** This is your final run of the week. The Zombie 5K app will guide you through specific intervals of walking and jogging/running. Focus on completing each interval as directed, maintaining a consistent effort.
                   * **Targets:** Cardiovascular endurance, leg endurance.
-                  
+
                   **Option 2: Reflex Bag HIIT + Core**
                   * **Reflex Bag HIIT (20-30 mins):**
                       * **Work (60 seconds):** Fast, explosive punching on the reflex bag (jabs, crosses, hooks, constant movement). Push your maximum effort.
@@ -343,7 +348,7 @@
                   workout: `**Long Walk (45-60 mins):**
                   * **How-to:** Go for a brisk walk outdoors. Focus on a steady pace that keeps your heart rate slightly elevated but doesn\'t feel like intense exercise. This is for recovery and light calorie burn.
                   * **Targets:** Cardiovascular health, circulation, mental de-stress.
-                  
+
                   **Stretching & Inversion Table (20-30 mins):**
                   * **How-to:** Focus on full-body flexibility.
                       * **Inversion Table:** If you have one, use it for 10-15 minutes for spinal decompression. Start with a partial inversion if new, gradually increasing angle. *Note:* This is for recovery, not exercise.
@@ -1004,4 +1009,3 @@
     </script>
 </body>
 </html>
-```
