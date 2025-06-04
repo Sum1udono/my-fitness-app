@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sculpt & Sprint Daily</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- React and ReactDOM CDNs -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<!-- Babel for JSX transformation in browser -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+  import React, { useState, useEffect, useMemo } from 'react';
+
+        // Helper function to format date as YYYY-MM-DD
+        const formatDate = (date) => date.toISOString().split('T')[0];
+
+        // Helper function to parse YYYY-MM-DD string to Date object (UTC to avoid timezone issues)
+        const parseDate = (dateString) => {
+          const [year, month, day] = dateString.split('-').map(Number);
+          return new Date(Date.UTC(year, month - 1, day));
+        };
+
+        // --- MEAL & EXERCISE PLAN DATA (Budget-Friendly Adjustments) ---
+        const planData = [
+          // Day 1: Monday
+          {
+            dayOfWeek: 'Monday',
+            items: [
+              {
+                id: 'M1B', type: 'Meal', name: 'Voluminous Berry Oatmeal',
+                details: {
+                  ingredients: '1/2 cup dry rolled oats, 1 cup frozen mixed berries, 1 tbsp natural peanut butter, Water or unsweetened dairy milk (skim/low-fat) for cooking.',
+                  prep: '1. In a saucepan, combine oats with 1-1.5 cups water or dairy milk. Bring to a simmer.\n2. Add frozen mixed berries. Cook for 5-7 minutes, stirring occasionally, until oats are creamy and berries have softened.\n3. Remove from heat, stir in peanut butter until melted and combined. Serve warm.',
+                  notes: 'Great for fiber and lasting fullness.'
+                }
+              },
+              {
+                id: 'M1L', type: 'Meal', name: 'Giant Tuna & Veggie Mountain Salad',
+                details: {
+                  ingredients: 'Unlimited mixed greens (spinach, lettuce, kale), 1 can (5oz) tuna in water (drained), 1.5 cups chopped cucumber, 1 cup shredded carrots, 1/2 cup canned chickpeas (rinsed and drained). 1 tbsp olive oil, 2 tbsp apple cider vinegar (or other vinegar), Salt and pepper to taste.',
+                  prep: '1. In a large bowl, combine mixed greens, tuna, cucumber, shredded carrots, and chickpeas.\n2. In a small bowl, whisk together olive oil, apple cider vinegar, salt, and pepper to make a dressing.\n3. Pour dressing over the salad and toss gently to combine. Eat a very large portion!',
+                  notes: 'Focus on cheaper, high-volume veggies like cucumber and carrots. Load up!'
+                }
+              },
+              {
+                id: 'M1S', type: 'Meal', name: 'Mega Veggie Sticks',
+                details: {
+                  ingredients: '2 cups mixed raw veggies (e.g., celery sticks, baby carrots, bell pepper strips), 2 tbsp hummus.',
+                  prep: '1. Wash and cut vegetables into sticks or florets.\n2. Serve with hummus for dipping.',
+                  notes: 'High volume, low calorie, excellent for managing hunger between meals. Prioritize carrots and celery for cost.'
+                }
+              },
+              {
+                id: 'M1D', type: 'Meal', name: 'Lean Turkey & Frozen Veggie Skillet',
+                details: {
+                  ingredients: '4 oz lean ground turkey (93% lean or higher), 4 cups chopped frozen mixed vegetables (e.g., broccoli, cauliflower, green beans, peas), 1/2 onion (chopped), 1 clove garlic (minced), 1 tsp olive oil, Salt, pepper, garlic powder, onion powder, paprika to taste. Served with 1/2 cup cooked brown rice.',
+                  prep: '1. Heat olive oil in a large skillet over medium-high heat. Add ground turkey and onion, cook until turkey is browned, breaking it apart with a spoon.\n2. Drain any excess fat. Add minced garlic and stir for 1 minute until fragrant.\n3. Add frozen mixed vegetables and seasonings. Stir well. Cover and cook for 8-10 minutes, stirring occasionally, until vegetables are tender-crisp.\n4. Serve a generous portion of the turkey and veggie mix over 1/2 cup cooked brown rice.',
+                  notes: 'Make extra for tomorrow\'s lunch! Rely heavily on cost-effective frozen veggies.'
+                }
+              },
+              {
+                id: 'M1E', type: 'Exercise', name: 'Zombie 5K Run Training (Week 1, Day 1)',
+                details: {
+                  warmUp: '5 mins light walk.',
+                  workout: 'Follow the Zombie 5K app instructions precisely for your first run/walk session. The app guides you through intervals of walking and jogging, gradually increasing jogging time.',
+                  coolDown: '5 mins gentle walk, then static stretches for: Quad stretch (hold foot to glutes), Hamstring stretch (reach for toes), Calf stretch (lean into wall). Hold each stretch for 20-30 seconds.',
+                  notes: 'Focus on breathing. Don\'t worry about speed, just complete the intervals. Your "walking endurance" is a great base for this!'
+                }
+              },
+            ]
+          },
+          // Day 2: Tuesday
+          {
+            dayOfWeek: 'Tuesday',
+            items: [
+              {
+                id: 'T2B', type: 'Meal', name: 'Filling Egg & Spinach Scramble',
+                details: {
+                  ingredients: '2 large eggs, 2 cups fresh spinach (or 1 cup frozen), 1 tsp olive oil, Salt and pepper to taste. Served with 1 slice whole-wheat toast.',
+                  prep: '1. Heat olive oil in a non-stick skillet over medium heat. Add spinach and cook until wilted (if using fresh) or heated through (if frozen).\n2. In a bowl, whisk eggs with salt and pepper. Pour over spinach in the skillet.\n3. Scramble gently until cooked through. Serve immediately with whole-wheat toast.',
+                  notes: 'Spinach cooks down a lot, so 2 cups fresh is a good volume. Frozen spinach is a budget-friendly option.'
+                }
+              },
+              {
+                id: 'T2L', type: 'Meal', name: 'Leftover Lean Turkey & Frozen Veggie Skillet',
+                details: {
+                  ingredients: 'Leftover Lean Turkey & Frozen Veggie Skillet from Monday (ensure it was refrigerated promptly).',
+                  prep: 'Reheat gently on stovetop or in microwave until piping hot.',
+                  notes: 'Convenient and still highly nutritious.'
+                }
+              },
+              {
+                id: 'T2S', type: 'Meal', name: 'Hard-Boiled Egg & Baby Carrots',
+                details: {
+                  ingredients: '1 hard-boiled egg, 1.5 cups baby carrots.',
+                  prep: 'Have pre-boiled eggs ready. Wash baby carrots.',
+                  notes: 'Quick, protein-packed, and very budget-friendly.'
+                }
+              },
+              {
+                id: 'T2D', type: 'Meal', name: 'Hearty Lentil & Veggie Soup (Massive Bowl)',
+                details: {
+                  ingredients: '1 cup dried brown or green lentils (rinsed), 6-8 cups low-sodium vegetable broth, 1 large onion (chopped), 2 carrots (chopped), 2 celery stalks (chopped), 1 (14.5oz) can diced tomatoes (undrained), 2 cups packed fresh spinach or kale (chopped), 1 tsp olive oil, 1 tsp dried thyme, 1 tsp dried oregano, Salt and pepper to taste.',
+                  prep: '1. Heat olive oil in a large pot or Dutch oven over medium heat. Add onion, carrots, and celery. Sauté for 5-7 minutes until softened.\n2. Add rinsed lentils, vegetable broth, diced tomatoes, thyme, and oregano. Bring to a boil, then reduce heat to low, cover, and simmer for 25-30 minutes, or until lentils are tender.\n3. Stir in spinach/kale until wilted. Season with salt and pepper. Serve a very generous 2-cup portion.',
+                  notes: 'Make a large batch (double or triple) to last for multiple meals throughout the week. Dried lentils are incredibly cheap and filling.'
+                }
+              },
+              {
+                id: 'T2E', type: 'Exercise', name: 'Dedicated Full Body Strength',
+                details: {
+                  warmUp: '5 mins dynamic stretches (arm circles, leg swings, light bodyweight squats).',
+                  workout: `Circuit 1 (3-4 sets, 60-90 sec rest between sets. Adjust Weider incline/resistance to be CHALLENGING - aim for muscle fatigue on last reps):
+                  1.  **Weider Squats/Leg Press (10-15 reps):** *How-to:* On the Weider, set up for squats or leg press. Lower your body by bending your knees and hips, keeping your back straight and chest up, as if sitting in a chair. Push through your heels to return to start. *Targets:* Quads, hamstrings, glutes.
+                  2.  **Weider Chest Press (8-12 reps):** *How-to:* Lie on the bench, grip the handles. Push handles away from your chest, extending arms. Control the return. *Targets:* Chest (pectorals), shoulders (deltoids), triceps.
+                  3.  **Weider Lat Pulldowns (or Rows if available) (8-12 reps):** *How-to:* For pulldowns, sit facing the machine, grasp the bar/handles. Pull down towards your chest, squeezing shoulder blades together. Control the return. For rows, face the machine, pull handles towards your torso, squeezing shoulder blades. *Targets:* Back (lats, rhomboids), biceps.
+                  
+                  Circuit 2 (2-3 sets, 45-60 sec rest between sets):
+                  1.  **Triceps Dips (using a sturdy chair) (8-12 reps):** *How-to:* Sit on edge of chair, hands grasping edge next to hips, fingers pointing forward. Slide hips off chair, supporting weight with arms. Bend elbows, lowering body until upper arms are parallel to floor. Push back up. *Targets:* Triceps.
+                  2.  **Weider Bicep Curls (8-12 reps):** *How-to:* Position yourself to isolate biceps. Curl handles towards your shoulders, squeezing biceps. Control the return. *Targets:* Biceps.
+                  3.  **Plank (45-60 sec hold):** *How-to:* Start on forearms and toes. Keep body in a straight line from head to heels. Engage core, don\'t let hips sag or pike up. *Targets:* Entire core (abs, obliques, lower back).
+                  4.  **Ab Roller (8-12 challenging reps):** *How-to:* Kneel on floor, grasp ab roller handles. Slowly roll the wheel forward, extending your body, keeping core tight and back flat. Roll back to start using your core. *Targets:* Abs, obliques, lower back, shoulders.`,
+                  coolDown: '5 mins static stretches: Hold each stretch for 20-30 seconds. Focus on chest, back, shoulders, quads, hamstrings, glutes.',
+                  notes: 'Focus on form over speed. Push for muscle fatigue on last reps.'
+                }
+              },
+            ]
+          },
+          // Day 3: Wednesday
+          {
+            dayOfWeek: 'Wednesday',
+            items: [
+              {
+                id: 'W3B', type: 'Meal', name: 'Berry & Nutty Greek Yogurt',
+                details: {
+                  ingredients: '1/2 cup plain Greek yogurt (0% or 2% fat), 1/2 cup frozen mixed berries, 1/4 cup raw almonds (whole or chopped).',
+                  prep: '1. Combine Greek yogurt and frozen berries in a bowl. The frozen berries will help cool and thicken the yogurt.\n2. Sprinkle almonds on top. Serve immediately.',
+                  notes: 'Great source of protein and healthy fats. Greek yogurt is very high in protein for its calories.'
+                }
+              },
+              {
+                id: 'W3L', type: 'Meal', name: 'Crunchy Tuna & Veggie Lettuce Wraps',
+                details: {
+                  ingredients: '1 can (5oz) tuna in water (drained), 1.5 cups shredded cabbage, 1 cup shredded carrots, 1/4 cup chopped green onion, 1 tbsp light mayonnaise or plain Greek yogurt, Salt and pepper to taste. Unlimited large lettuce cups (e.g., iceberg, romaine).',
+                  prep: '1. In a bowl, flake drained tuna. Add shredded cabbage, carrots, green onion, light mayo/Greek yogurt, salt, and pepper. Mix well.\n2. Spoon mixture into large lettuce cups and wrap up. Eat as many lettuce wraps as you need to feel full.',
+                  notes: 'Cabbage and carrots are very inexpensive and provide great crunch and volume.'
+                }
+              },
+              {
+                id: 'W3S', type: 'Meal', name: 'Cut-Up Melon & Cucumber',
+                details: {
+                  ingredients: '1 cup cut-up melon (e.g., cantaloupe/watermelon - very high volume for calories), 1 cup cucumber slices.',
+                  prep: 'Wash and cut melon and cucumber. Serve chilled.',
+                  notes: 'Extremely hydrating and low calorie, perfect for a high-volume snack.'
+                }
+              },
+              {
+                id: 'W3D', type: 'Meal', name: 'Chicken Breast with Steamed & Roasted Veggies',
+                details: {
+                  ingredients: '4 oz baked chicken breast (skinless), 2 cups steamed broccoli florets, 2 cups roasted zucchini and bell peppers (chopped), 1 tsp olive oil, Salt, pepper, garlic powder, onion powder to taste. Served with 1/2 cup cooked quinoa.',
+                  prep: '1. Preheat oven to 400°F (200°C). Toss chopped zucchini and bell peppers with 1 tsp olive oil, salt, pepper, garlic powder, and onion powder on a baking sheet. Roast for 15-20 minutes until tender and slightly caramelized.\n2. Meanwhile, steam broccoli until tender-crisp.\n3. Bake chicken breast until cooked through (internal temp 165°F/74°C), season with salt and pepper.\n4. Serve chicken with generous portions of steamed broccoli and roasted vegetables, alongside 1/2 cup cooked quinoa.',
+                  notes: 'A classic lean protein and veggie combo. Quinoa provides complete protein and fiber. Adjust fresh veggie quantities based on sales.'
+                }
+              },
+              {
+                id: 'W3E', type: 'Exercise', name: 'Zombie 5K Run Training (Week 1, Day 2)',
+                details: {
+                  warmUp: '5 mins light walk.',
+                  workout: 'Continue following the Zombie 5K app instructions. Focus on maintaining a consistent pace during jogging intervals, even if it feels slow. The goal is endurance, not speed.',
+                  coolDown: '5 mins gentle walk, then stretch your quads, hamstrings, and calves. Ensure thorough stretching, especially for the legs after running.',
+                  notes: 'Pay attention to your breathing during jogging intervals. Your body is adapting, so some discomfort is normal, but sharp pain is not.'
+                }
+              },
+            ]
+          },
+          // Day 4: Thursday
+          {
+            dayOfWeek: 'Thursday',
+            items: [
+              {
+                id: 'Th4B', type: 'Meal', name: 'Peach & Chia Seed Oatmeal',
+                details: {
+                  ingredients: '1/2 cup dry rolled oats, 1/2 cup frozen sliced peaches, 1 tbsp chia seeds, Water or unsweetened dairy milk (skim/low-fat) for cooking.',
+                  prep: '1. In a saucepan, combine oats with 1-1.5 cups water or dairy milk. Bring to a simmer.\n2. Add frozen peaches and chia seeds. Cook for 5-7 minutes, stirring occasionally, until oats are creamy and peaches have softened.\n3. Serve warm.',
+                  notes: 'Chia seeds add extra fiber and omega-3s, helping with satiety.'
+                }
+              },
+              {
+                id: 'Th4L', type: 'Meal', name: 'Leftover Chicken Breast with Double Veggies & Quinoa',
+                details: {
+                  ingredients: 'Leftovers from Wednesday.',
+                  prep: 'Reheat gently.',
+                  notes: ''
+                }
+              },
+              {
+                id: 'Th4S', type: 'Meal', name: 'Air-Popped Popcorn',
+                details: {
+                  ingredients: '1 cup air-popped popcorn (approx. 2 tbsp unpopped kernels), light salt to taste, no butter.',
+                  prep: '1. Use an air popper or a large pot with a lid (no oil needed for air popping).\n2. Pop kernels until all are popped. Season with light salt.',
+                  notes: 'Fantastic high-volume snack, very low in calories per cup. Avoid added butter or heavy oils. Very budget-friendly.'
+                }
+              },
+              {
+                id: 'Th4D', type: 'Meal', name: 'Lean Turkey & Frozen Vegetable Stir-fry',
+                details: {
+                  ingredients: '4 oz lean ground turkey or chicken breast strips, 4 cups frozen mixed stir-fry vegetables, 1 tbsp low-sodium soy sauce or tamari, 1 tsp grated fresh ginger, 1 clove garlic (minced), 1 tsp sesame oil (optional, for flavor), 1/2 cup cooked brown rice.',
+                  prep: '1. Heat a large non-stick skillet or wok over medium-high heat. Add turkey/chicken and cook until browned, breaking it apart (if ground) or cooked through (if strips).\n2. Drain any excess fat. Add garlic and ginger, stir for 30 seconds until fragrant.\n3. Add frozen mixed stir-fry vegetables. Cook for 5-7 minutes, stirring frequently, until vegetables are tender-crisp.\n4. Stir in soy sauce/tamari and sesame oil (if using). Cook for another 1-2 minutes until everything is well combined and heated through.\n5. Serve a generous portion over 1/2 cup cooked brown rice.',
+                  notes: 'Frozen stir-fry mixes are very convenient and cost-effective for high veggie volume.'
+                }
+              },
+              {
+                id: 'Th4E', type: 'Exercise', name: 'Dedicated Full Body Strength',
+                details: {
+                  warmUp: '5 mins dynamic stretches: Arm circles (forward/backward), Leg swings (forward/side), Torso twists, Light bodyweight squats (no depth).',
+                  workout: `Circuit 1 (3-4 sets, 60-90 sec rest between sets. Adjust Weider incline/resistance to be CHALLENGING - aim for muscle fatigue on last reps):
+                  1.  **Weider Squats/Leg Press (10-15 reps):** *How-to:* On the Weider, set up for squats or leg press. Lower your body by bending your knees and hips, keeping your back straight and chest up, as if sitting in a chair. Push through your heels to return to start. *Targets:* Quads, hamstrings, glutes.
+                  2.  **Weider Chest Press (8-12 reps):** *How-to:* Lie on the bench, grip the handles. Push handles away from your chest, extending arms. Control the return. *Targets:* Chest (pectorals), shoulders (deltoids), triceps.
+                  3.  **Weider Lat Pulldowns (or Rows if available) (8-12 reps):** *How-to:* For pulldowns, sit facing the machine, grasp the bar/handles. Pull down towards your chest, squeezing shoulder blades together. Control the return. For rows, face the machine, pull handles towards your torso, squeezing shoulder blades. *Targets:* Back (lats, rhomboids), biceps.
+                  
+                  Circuit 2 (2-3 sets, 45-60 sec rest between sets):
+                  1.  **Weider Shoulder Press (8-12 reps):** *How-to:* On the Weider, position yourself for shoulder press (usually sitting or standing). Push handles overhead, extending arms, engaging shoulder muscles. Control the return. *Targets:* Shoulders (deltoids), triceps.
+                  2.  **Weider Bicep Curls (8-12 reps):** *How-to:* Position yourself to isolate biceps. Curl handles towards your shoulders, squeezing biceps. Control the return. *Targets:* Biceps.
+                  3.  **Weider Triceps Extensions (8-12 reps):** *How-to:* On the Weider, set up for triceps extensions (e.g., overhead or pushdown style). Extend arms fully, feeling the squeeze in triceps. Control the return. *Targets:* Triceps.
+                  4.  **Plank (45-60 sec hold):** *How-to:* Start on forearms and toes. Keep body in a straight line from head to heels. Engage core, don\'t let hips sag or pike up. *Targets:* Entire core (abs, obliques, lower back).
+                  5.  **Ab Roller (8-12 challenging reps):** *How-to:* Kneel on floor, grasp ab roller handles. Slowly roll the wheel forward, extending your body, keeping core tight and back flat. Roll back to start using your core. *Targets:* Abs, obliques, lower back, shoulders.`,
+                  coolDown: '5 mins static stretches: Hold each stretch for 20-30 seconds. Focus on chest, back, shoulders, quads, hamstrings, glutes.',
+                  notes: 'Try to increase reps or resistance from Tuesday if possible. Consistent challenge is key for muscle definition.'
+                }
+              },
+            ]
+          },
+          // Day 5: Friday
+          {
+            dayOfWeek: 'Friday',
+            items: [
+              {
+                id: 'F5B', type: 'Meal', name: 'Savory Egg & Bean Scramble',
+                details: {
+                  ingredients: '2 large eggs, 1/2 cup canned black beans (rinsed and drained), 1/2 cup salsa, Salt, pepper, and a sprinkle of chili powder to taste.',
+                  prep: '1. In a non-stick skillet, scramble eggs. When almost cooked, stir in rinsed black beans, salsa, chili powder, salt, and pepper.\n2. Cook for another 1-2 minutes until heated through and well combined.',
+                  notes: 'A quick and savory breakfast packed with protein and fiber.'
+                }
+              },
+              {
+                id: 'F5L', type: 'Meal', name: 'Massive Veggie & Hummus Plate',
+                details: {
+                  ingredients: 'Unlimited raw veggies (e.g., carrots, celery sticks, bell pepper strips, cucumber slices), 1/2 cup hummus, 1 hard-boiled egg.',
+                  prep: '1. Arrange a large platter with a variety of raw vegetables.\n2. Place hummus in a small bowl in the center. Slice or halve the hard-boiled egg and add to the plate.',
+                  notes: 'Focus on consuming a huge volume of raw vegetables. They are incredibly low in calories but very filling. Carrots and celery are cheap and filling.'
+                }
+              },
+              {
+                id: 'F5S', type: 'Meal', name: 'Apple & Steamed Green Beans',
+                details: {
+                  ingredients: '1 medium apple, 1 cup steamed green beans.',
+                  prep: '1. Wash and slice apple. Steam green beans until tender-crisp.\n2. Serve together.',
+                  notes: 'Unusual combo but great for fiber and volume!'
+                }
+              },
+              {
+                id: 'F5D', type: 'Meal', name: 'Baked Chicken Breast with Steamed Greens & Potato',
+                details: {
+                  ingredients: '4 oz chicken breast (skinless), 3-4 cups mixed greens (spinach, kale, or collard greens), 1 tsp olive oil, 1 clove garlic (minced), Lemon wedge, Salt, pepper, paprika to taste. Served with 1 small baked potato (approx. 4-5 oz/medium).',
+                  prep: '1. Preheat oven to 400°F (200°C). Season chicken with salt, pepper, and paprika. Place on a baking sheet and bake for 20-25 minutes, or until cooked through (internal temp 165°F/74°C).\n2. While chicken bakes, heat olive oil in a large skillet. Add minced garlic and sauté for 30 seconds until fragrant. Add mixed greens in batches if necessary, and cook until wilted.\n3. Serve baked chicken with a generous portion of super greens and the baked potato. Squeeze fresh lemon over chicken and greens.',
+                  notes: 'Greens cook down significantly, so 3-4 cups raw will be a substantial cooked portion. Potatoes are a very budget-friendly carb source.'
+                }
+              },
+              {
+                id: 'F5E', type: 'Exercise', name: 'Zombie 5K Run Training (Week 1, Day 3) OR Reflex Bag HIIT + Core',
+                details: {
+                  warmUp: '5 mins light walk or light shadow boxing.',
+                  workout: `**Option 1: Zombie 5K Run Training (Week 1, Day 3)**
+                  * **How-to:** This is your final run of the week. The Zombie 5K app will guide you through specific intervals of walking and jogging/running. Focus on completing each interval as directed, maintaining a consistent effort.
+                  * **Targets:** Cardiovascular endurance, leg endurance.
+                  
+                  **Option 2: Reflex Bag HIIT + Core**
+                  * **Reflex Bag HIIT (20-30 mins):**
+                      * **Work (60 seconds):** Fast, explosive punching on the reflex bag (jabs, crosses, hooks, constant movement). Push your maximum effort.
+                      * **Rest (30 seconds):** Active rest (e.g., marching in place, light shadow boxing).
+                      * Repeat 8-12 times.
+                      * *How-to:* Focus on quick hand speed and footwork. Keep your core engaged and your shoulders relaxed. The bag will rebound quickly, so stay alert.
+                      * *Targets:* Cardiovascular endurance, hand-eye coordination, shoulders, arms, core.
+                  * **Core Work (10-15 mins, after HIIT):**
+                      * **Bicycle Crunches (20-30 reps per side, 2-3 sets):** *How-to:* Lie on your back, hands behind head, knees bent, feet off floor. Bring one elbow towards the opposite knee while extending the other leg. Alternate sides in a cycling motion. *Targets:* Obliques, rectus abdominis.
+                      * **Leg Raises (on floor) (15-20 reps, 2-3 sets):** *How-to:* Lie on your back, hands under glutes for support. Keep legs straight (or slightly bent if needed). Slowly lower legs towards floor without arching lower back, then slowly raise them back up. *Targets:* Lower abs, hip flexors.
+                      * **Side Plank (30-45 seconds per side, 2 sets):** *How-to:* Lie on your side, supporting yourself on one forearm (elbow under shoulder) and the side of your foot. Keep body in a straight line from head to heels. Lift hips off the floor. *Targets:* Obliques, shoulders.
+                      * **Pilates Core Exercises:** If you have Pilates equipment (e.g., magic circle, resistance bands), use them for targeted core work like inner thigh squeezes with the circle, or resistance band twists.
+                  `,
+                  coolDown: '5 mins gentle stretches for shoulders, chest, and core.',
+                  notes: 'Choose the option that best fits your energy and time. For the Reflex Bag, focus on explosive power during work intervals. This is a high-calorie burn session.'
+                }
+              },
+            ]
+          },
+          // Day 6: Saturday
+          {
+            dayOfWeek: 'Saturday',
+            items: [
+              {
+                id: 'Sa6B', type: 'Meal', name: 'Fruity Greek Yogurt & Nuts',
+                details: {
+                  ingredients: '1/2 cup plain Greek yogurt (0% or 2% fat), 1/2 cup frozen mixed fruit, 1 tbsp sunflower seeds.',
+                  prep: '1. Combine Greek yogurt and frozen fruit in a bowl.\n2. Sprinkle sunflower seeds on top. Serve immediately.',
+                  notes: 'Sunflower seeds add a nice crunch and healthy fats.'
+                }
+              },
+              {
+                id: 'Sa6L', type: 'Meal', name: 'Leftover Baked Chicken Breast with Steamed Greens & Potato',
+                details: {
+                  ingredients: 'Leftovers from Friday.',
+                  prep: 'Reheat gently.',
+                  notes: ''
+                }
+              },
+              {
+                id: 'Sa6S', type: 'Meal', name: 'Baby Carrots & Greek Yogurt Dip',
+                details: {
+                  ingredients: '1 cup baby carrots, 1/4 cup plain Greek yogurt (0% or 2% fat), Pinch of salt, garlic powder, onion powder (optional).',
+                  prep: '1. In a small bowl, stir together Greek yogurt with a pinch of salt and optional seasonings.\n2. Serve with baby carrots for dipping.',
+                  notes: 'A crunchy and satisfying protein-rich snack. Very inexpensive.'
+                }
+              },
+              {
+                id: 'Sa6D', type: 'Meal', name: 'Chicken & Veggie Noodle Bowl (Controlled)',
+                details: {
+                  ingredients: '4 oz shredded cooked chicken breast, 3 cups mixed, thinly sliced or spiralized vegetables (e.g., zucchini, carrots, cabbage, mushrooms), 1/2 cup cooked whole wheat noodles, 1 cup low-sodium chicken broth, 1 tbsp low-sodium soy sauce or tamari, 1 tsp grated fresh ginger (optional), 1 clove garlic (minced, optional).',
+                  prep: '1. In a pot, heat chicken broth. Add minced garlic and ginger (if using). Bring to a simmer.\n2. Add sliced vegetables and cook for 3-5 minutes until tender-crisp.\n3. Add cooked chicken and cooked whole wheat noodles. Stir in soy sauce/tamari. Heat through.\n4. Serve hot in a large bowl.',
+                  notes: 'Control noodle portion for calorie management. The broth and veggies provide the bulk. Utilize cheaper veggies like cabbage and carrots.'
+                }
+              },
+              {
+                id: 'Sa6E', type: 'Exercise', name: 'Active Recovery & Mobility',
+                details: {
+                  warmUp: '5 mins light walking or dynamic stretches.',
+                  workout: `**Long Walk (45-60 mins):**
+                  * **How-to:** Go for a brisk walk outdoors. Focus on a steady pace that keeps your heart rate slightly elevated but doesn\'t feel like intense exercise. This is for recovery and light calorie burn.
+                  * **Targets:** Cardiovascular health, circulation, mental de-stress.
+                  
+                  **Stretching & Inversion Table (20-30 mins):**
+                  * **How-to:** Focus on full-body flexibility.
+                      * **Inversion Table:** If you have one, use it for 10-15 minutes for spinal decompression. Start with a partial inversion if new, gradually increasing angle. *Note:* This is for recovery, not exercise.
+                      * **Exercise Ball Stretches:**
+                          * **Back Extension:** Lie on your back over the ball, letting your spine gently extend.
+                          * **Hip Flexor Stretch:** Kneel with one foot on the ball, gently lean forward.
+                      * **Other Stretches:** Deep quad stretch, hamstring stretch, glute stretch (e.g., figure-4), chest stretch (arms wide against a doorframe). Hold each for 20-30 seconds.
+                  * **Couples Yoga (Optional Addition):** If you can convince your wife, this is a fantastic way to add flexibility, balance, and mental well-being. It fits perfectly on this active recovery day, either in place of some stretching or as an additional session. It\'s great for joint health and stress reduction.
+                  * **Targets:** Flexibility, range of motion, recovery, muscle soreness relief, spinal health.`,
+                  coolDown: 'Focus on relaxation and breathing throughout stretching.',
+                  notes: 'This is your active rest day. Enjoy the movement and focus on recovery. Essential after a week of hard work and a demanding job.'
+                }
+              },
+            ]
+          },
+          // Day 7: Sunday
+          {
+            dayOfWeek: 'Sunday',
+            items: [
+              {
+                id: 'Su7B', type: 'Meal', name: 'Apple & Cinnamon Oatmeal',
+                details: {
+                  ingredients: '1/2 cup dry rolled oats, 1/4 cup chopped apple, 1 tsp cinnamon, Water or unsweetened dairy milk (skim/low-fat) for cooking.',
+                  prep: '1. In a saucepan, combine oats with 1-1.5 cups water or dairy milk. Bring to a simmer.\n2. Stir in chopped apple and cinnamon. Cook for 5-7 minutes until oats are creamy and apple is tender.\n3. Serve warm.',
+                  notes: 'Simple, comforting, and packed with fiber.'
+                }
+              },
+              {
+                id: 'Su7L', type: 'Meal', name: 'Giant "Clean Out the Fridge" Salad/Bowl',
+                details: {
+                  ingredients: 'Unlimited mixed greens/raw veggies (use whatever fresh veggies you have left), Any leftover cooked lean protein (e.g., chicken, tuna, beans), 1/2 cup cooked brown rice or quinoa (optional), 1-2 tbsp light vinaigrette (or olive oil & vinegar).',
+                  prep: '1. Combine all available greens, raw veggies, and cooked protein in a large bowl.\n2. Add cooked grain if desired.\n3. Dress with vinaigrette and toss.',
+                  notes: 'A great way to use up leftovers and prevent food waste. Maximize veggie volume!'
+                }
+              },
+              {
+                id: 'Su7S', type: 'Meal', name: 'Hard-Boiled Egg',
+                details: {
+                  ingredients: '1 hard-boiled egg.',
+                  prep: 'Ensure eggs are pre-boiled and chilled.',
+                  notes: 'Quick protein boost.'
+                }
+              },
+              {
+                id: 'Su7D', type: 'Meal', name: 'Voluminous Chicken & Vegetable Soup',
+                details: {
+                  ingredients: '4 oz shredded cooked chicken breast, 3 cups mixed budget-friendly vegetables (e.g., celery, carrots, frozen peas, frozen corn, cabbage, green beans), 4-5 cups low-sodium chicken broth, 1/2 onion (chopped), Salt and pepper to taste, Fresh herbs (e.g., parsley) for garnish (optional).',
+                  prep: '1. In a large pot, combine chicken broth, chopped onion, carrots, and celery. Bring to a boil, then reduce heat and simmer for 10-15 minutes until vegetables are tender-crisp.\n2. Add shredded cooked chicken and frozen peas/corn. Cook for another 5 minutes until heated through.\n3. Season with salt and pepper. Serve a very large 2-3 cup portion, garnished with fresh herbs if desired.',
+                  notes: 'Excellent for batch cooking for future meals. Very high volume and comforting. Focus on cheaper frozen veggies and root vegetables.'
+                }
+              },
+              {
+                id: 'Su7E', type: 'Exercise', name: 'REST DAY - ABSOLUTELY NO EXERCISE!',
+                details: {
+                  warmUp: '',
+                  workout: 'Complete rest is vital for muscle repair, recovery, and preventing burnout. This is when your muscles grow and adapt to the training training stimulus from the week. Prioritize relaxation, good sleep, and gentle activities (like stretching if desired, but no structured workout).',
+                  coolDown: '',
+                  notes: 'Non-negotiable. Embrace this time to recharge your body and mind for the week ahead. Proper rest is as important as the workout itself.'
+                }
+              },
+            ]
+          },
+        ];
+
+        // --- SHOPPING LIST DATA (Budget-Friendly Adjustments) ---
+        const shoppingListsData = [
+          {
+            id: 'sunday_shop',
+            name: 'Sunday Shopping List (for Mon-Wed meals)',
+            categories: [
+              {
+                name: 'Proteins & Dairy',
+                items: [
+                  { id: 'eggs', name: 'Eggs (1 dozen)' },
+                  { id: 'canned_tuna', name: 'Canned Tuna in water (4-5 cans)' },
+                  { id: 'lean_ground_turkey', name: 'Lean Ground Turkey (1.5 lbs, for 5 portions)' }, // Adjusted quantity
+                  { id: 'chicken_breast_sun', name: 'Chicken Breast (1.5 lbs, for 5 portions)' }, // Adjusted quantity
+                  { id: 'greek_yogurt', name: 'Plain Greek Yogurt (large tub)' },
+                  { id: 'dairy_milk', name: 'Dairy Milk (skim/low-fat)' },
+                ]
+              },
+              {
+                name: 'Grains & Legumes',
+                items: [
+                  { id: 'rolled_oats', name: 'Rolled Oats (large container)' },
+                  { id: 'brown_rice', name: 'Brown Rice (large bag)' },
+                  { id: 'quinoa', name: 'Quinoa (small bag)' },
+                  { id: 'dried_lentils', name: 'Dried Brown or Green Lentils (1 bag)' },
+                  { id: 'canned_black_beans', name: 'Canned Black Beans (3-4 cans)' }, // Increased reliance
+                  { id: 'canned_kidney_beans', name: 'Canned Kidney Beans (2-3 cans)' }, // Increased reliance
+                  { id: 'whole_wheat_bread', name: 'Whole-wheat bread (1 loaf)' },
+                  { id: 'whole_wheat_noodles', name: 'Whole-wheat noodles (1 box)' },
+                  { id: 'popcorn_kernels', name: 'Air-popped popcorn kernels (1 bag)' },
+                ]
+              },
+              {
+                name: 'Frozen Fruits & Veggies',
+                items: [
+                  { id: 'frozen_mixed_berries', name: 'Frozen Mixed Berries (1 large bag)' },
+                  { id: 'frozen_sliced_peaches', name: 'Frozen Sliced Peaches (1 large bag)' },
+                  { id: 'frozen_mixed_veg', name: 'Frozen Mixed Vegetables (2 large bags, versatile)' }, // Increased reliance
+                  { id: 'frozen_stir_fry_mix', name: 'Frozen Stir-fry Mix (1 large bag)' },
+                  { id: 'frozen_peas', name: 'Frozen Peas (1 bag)' },
+                  { id: 'frozen_corn', name: 'Frozen Corn (1 bag)' },
+                ]
+              },
+              {
+                name: 'Fresh Fruits (for Mon-Wed)',
+                items: [
+                  { id: 'melon', name: 'Melon (1 small, e.g., cantaloupe/watermelon)' },
+                  { id: 'apples', name: 'Apples (2-3 medium)' },
+                ]
+              },
+              {
+                name: 'Fresh Vegetables (for Mon-Wed - focus on cheap/versatile)',
+                items: [
+                  { id: 'mixed_greens_mon_wed', name: 'Mixed Greens (large container/bag)' },
+                  { id: 'cucumber_mon_wed', name: 'Cucumbers (1-2)' },
+                  { id: 'bell_peppers_mon_wed', name: 'Bell Peppers (2-3, any color)' },
+                  { id: 'carrots_mon_wed', name: 'Carrots (1 bag, for shredding and sticks)' },
+                  { id: 'celery_mon_wed', name: 'Celery (1 bunch)' },
+                  { id: 'fresh_spinach_mon_wed', name: 'Fresh Spinach (1 large bag)' },
+                  { id: 'onions_mon_wed', name: 'Onions (2-3 medium)' },
+                  { id: 'garlic_mon_wed', name: 'Garlic (1 head)' },
+                  { id: 'cherry_tomatoes_mon_wed', name: 'Cherry Tomatoes (1 pint)' },
+                  { id: 'cabbage_mon_wed', name: 'Cabbage (1 head)' },
+                  { id: 'zucchini_mon_wed', name: 'Zucchini (1-2)' },
+                ]
+              },
+              {
+                name: 'Pantry Staples & Fats',
+                items: [
+                  { id: 'peanut_butter', name: 'Natural Peanut Butter (1 jar)' },
+                  { id: 'raw_almonds', name: 'Raw Almonds (small bag)' },
+                  { id: 'sunflower_seeds', name: 'Sunflower Seeds (small bag)' },
+                  { id: 'olive_oil', name: 'Olive Oil' },
+                  { id: 'apple_cider_vinegar', name: 'Apple Cider Vinegar' },
+                  { id: 'low_sodium_soy_sauce', name: 'Low-Sodium Soy Sauce or Tamari' },
+                  { id: 'low_sodium_veg_broth', name: 'Low-Sodium Vegetable Broth (2-3 large cartons)' },
+                  { id: 'low_sodium_chicken_broth', name: 'Low-Sodium Chicken Broth (2-3 large cartons)' },
+                  { id: 'canned_diced_tomatoes', name: 'Canned Diced Tomatoes (2-3 cans)' },
+                  { id: 'salsa', name: 'Salsa (1 jar)' },
+                  { id: 'chili_powder', name: 'Chili Powder' },
+                  { id: 'cumin', name: 'Cumin' },
+                  { id: 'smoked_paprika', name: 'Smoked Paprika' },
+                  { id: 'dried_thyme', name: 'Dried Thyme' },
+                  { id: 'dried_oregano', name: 'Dried Oregano' },
+                  { id: 'salt_pepper', name: 'Salt & Pepper' },
+                  { id: 'fresh_ginger', name: 'Fresh Ginger (optional, small piece)' },
+                ]
+              }
+            ]
+          },
+          {
+            id: 'midweek_shop',
+            name: 'Mid-Week Refresh Shopping (for Thu-Sun meals)',
+            categories: [
+              {
+                name: 'Fresh Produce (Replenish as needed - focus on budget-friendly)',
+                items: [
+                  { id: 'mid_mixed_greens', name: 'Mixed Greens (1 large container)' },
+                  { id: 'mid_cucumber', name: 'Cucumbers (1)' },
+                  { id: 'mid_bell_peppers', name: 'Bell Peppers (1-2)' },
+                  { id: 'mid_carrots', name: 'Carrots (if needed for sticks)' },
+                  { id: 'mid_fresh_spinach_kale', name: 'Fresh Spinach/Kale (if needed for Friday dinner)' },
+                  { id: 'mid_zucchini', name: 'Zucchini (if needed)' },
+                  { id: 'mid_mushrooms', name: 'Mushrooms (if desired for stir-fry)' },
+                  { id: 'mid_apples', name: 'Apples (if needed)' },
+                  { id: 'mid_melon', name: 'Melon (if needed)' },
+                ]
+              },
+              {
+                name: 'Proteins (Optional Replenishment - only if completely out of prepped)',
+                items: [
+                  { id: 'mid_chicken_breast', name: 'Chicken Breast (0.5-1 lb, if running low)' },
+                  { id: 'mid_ground_turkey', name: 'Lean Ground Turkey (0.5-1 lb, if running low)' },
+                ]
+              }
+            ]
+          }
+        ];
+
+        // --- PREP LIST DATA (Protein Portion Adjustments) ---
+        const prepListsData = [
+          {
+            id: 'sunday_prep',
+            name: 'Sunday Prep (Approx. 1.5 - 2.5 hours)',
+            items: [
+              { id: 'prep_eggs', name: 'Hard-Boil 4-5 Eggs (peel and store)' },
+              { id: 'prep_grains', name: 'Cook large batch of Brown Rice & Quinoa (store in airtight containers)' },
+              { id: 'prep_turkey', name: 'Cook entire 1.5 lbs Lean Ground Turkey. **Once cooked, divide into 5 portions of ~4 oz each using your kitchen scale.** Store in airtight containers.' },
+              { id: 'prep_chicken', name: 'Bake/Grill/Poach 1.5 lbs Chicken Breast. **Once cooked, divide into 5 portions of ~4 oz each using your kitchen scale.** Shred or chop and store in airtight containers.' },
+              { id: 'prep_soup_chili', name: 'Make large pot of Lentil Soup or Bean Chili (cool, portion, and store)' },
+              { id: 'prep_wash_chop_veg_mon_wed', name: 'Wash & Chop fresh veggies for Mon-Wed (greens, cucumber, peppers, carrots, celery, cabbage, zucchini, cherry tomatoes)' },
+              { id: 'prep_portion_hummus', name: 'Pre-portion hummus into small containers' },
+              { id: 'prep_oats', name: 'Measure out oats for daily breakfasts into individual containers/bags' },
+              { id: 'prep_pantry_check', name: 'Quick check on pantry staples (spices, oils, broths)' },
+              { id: 'prep_general_scale_note', name: 'Remember to use your kitchen scale for all protein portions for accuracy!' },
+            ]
+          },
+          {
+            id: 'midweek_prep',
+            name: 'Mid-Week Refresh Prep (Approx. 30-45 minutes)',
+            items: [
+              { id: 'prep_wash_chop_midweek_veg', name: 'Wash & Chop newly purchased fresh vegetables for Thu-Sun' },
+              { id: 'prep_cook_extra_protein', name: 'Optional: Quickly cook 0.5-1 lb extra chicken breast or ground turkey if needed. **Portion cooked protein to ~4 oz per serving.**' },
+            ]
+          }
+        ];
+
+
+        function App() {
+          const [currentDate, setCurrentDate] = useState(() => {
+            const savedDate = localStorage.getItem('currentDate');
+            // User wants to start on Thursday, June 5th, 2025
+            const desiredStartDate = parseDate('2025-06-05'); 
+            return savedDate ? parseDate(savedDate) : desiredStartDate;
+          });
+
+          const [completedItems, setCompletedItems] = useState(() => {
+            const savedCompleted = localStorage.getItem('dailyCompletedItems');
+            return savedCompleted ? JSON.parse(savedCompleted) : {};
+          });
+          const [shoppingCompleted, setShoppingCompleted] = useState(() => {
+            const saved = localStorage.getItem('shoppingCompletedItems');
+            return saved ? JSON.parse(saved) : {};
+          });
+          const [prepCompleted, setPrepCompleted] = useState(() => {
+            const saved = localStorage.getItem('prepCompletedItems');
+            return saved ? JSON.parse(saved) : {};
+          });
+
+          const [selectedItem, setSelectedItem] = useState(null);
+          const [currentPage, setCurrentPage] = useState('daily'); // 'daily', 'shopping', 'prep'
+
+          // --- Local Storage Effects ---
+          useEffect(() => {
+            localStorage.setItem('currentDate', formatDate(currentDate));
+          }, [currentDate]);
+
+          useEffect(() => {
+            localStorage.setItem('dailyCompletedItems', JSON.stringify(completedItems));
+          }, [completedItems]);
+
+          useEffect(() => {
+            localStorage.setItem('shoppingCompletedItems', JSON.stringify(shoppingCompleted));
+          }, [shoppingCompleted]);
+
+          useEffect(() => {
+            localStorage.setItem('prepCompletedItems', JSON.stringify(prepCompleted));
+          }, [prepCompleted]);
+
+          // --- Checkbox Handlers ---
+          const handleDailyCheckboxChange = (itemId) => {
+            const dateKey = formatDate(currentDate);
+            setCompletedItems(prev => ({
+              ...prev,
+              [dateKey]: {
+                ...(prev[dateKey] || {}),
+                [itemId]: !prev[dateKey]?.[itemId]
+              }
+            }));
+          };
+
+          const handleShoppingCheckboxChange = (listId, itemId) => {
+            setShoppingCompleted(prev => ({
+              ...prev,
+              [listId]: {
+                ...(prev[listId] || {}),
+                [itemId]: !prev[listId]?.[itemId]
+              }
+            }));
+          };
+
+          const handlePrepCheckboxChange = (listId, itemId) => {
+            setPrepCompleted(prev => ({
+              ...prev,
+              [listId]: {
+                ...(prev[listId] || {}),
+                [itemId]: !prev[listId]?.[itemId]
+              }
+            }));
+          };
+
+          // --- Date/Day Calculation for Daily Plan ---
+          const currentDayIndex = useMemo(() => {
+            // The plan data starts with Monday (index 0).
+            // To correctly map a given date to the 7-day cycle, we need a reference Monday.
+            const referenceMonday = parseDate('2025-06-02'); // June 2, 2025 was a Monday
+            const diffTime = currentDate.getTime() - referenceMonday.getTime();
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            // Use modulo to cycle through the 7 days of the plan
+            return (diffDays % planData.length + planData.length) % planData.length; // Ensures positive modulo result
+          }, [currentDate]);
+
+          const currentDayPlan = planData[currentDayIndex];
+          const dateKey = formatDate(currentDate);
+          const dailyCompletedForDate = completedItems[dateKey] || {};
+
+          const totalDailyItems = currentDayPlan.items.length;
+          const completedDailyCount = currentDayPlan.items.filter(item => dailyCompletedForDate[item.id]).length;
+          const dailyProgressPercentage = totalDailyItems > 0 ? (completedDailyCount / totalDailyItems) * 100 : 0;
+
+          // --- Navigation Handlers for Daily Plan ---
+          const goToNextDay = () => {
+            const nextDate = new Date(currentDate);
+            nextDate.setDate(currentDate.getDate() + 1);
+            setCurrentDate(nextDate);
+            setSelectedItem(null); // Clear selected item when changing day
+          };
+
+          const goToPreviousDay = () => {
+            const prevDate = new Date(currentDate);
+            prevDate.setDate(currentDate.getDate() - 1);
+            setCurrentDate(prevDate);
+            setSelectedItem(null); // Clear selected item when changing day
+          };
+
+          // --- Reset Progress Handlers ---
+          const resetProgress = (listType, listId) => {
+            const confirmDialog = document.createElement('div');
+            confirmDialog.className = 'fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50';
+            confirmDialog.innerHTML = `
+              <div class="bg-white p-6 rounded-lg shadow-xl text-center max-w-xs mx-auto">
+                <p class="text-lg font-semibold mb-4">Are you sure you want to reset this list's progress?</p>
+                <div class="flex justify-around">
+                  <button id="confirmYes" class="px-5 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors">Yes</button>
+                  <button id="confirmNo" class="px-5 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition-colors">No</button>
+                </div>
+              </div>
+            `;
+            document.body.appendChild(confirmDialog);
+
+            document.getElementById('confirmYes').onclick = () => {
+              if (listType === 'daily') {
+                setCompletedItems(prev => {
+                  const newState = { ...prev };
+                  delete newState[listId]; // listId here is the dateKey
+                  return newState;
+                });
+              } else if (listType === 'shopping') {
+                setShoppingCompleted(prev => {
+                  const newState = { ...prev };
+                  delete newState[listId];
+                  return newState;
+                });
+              } else if (listType === 'prep') {
+                setPrepCompleted(prev => {
+                  const newState = { ...prev };
+                  delete newState[listId];
+                  return newState;
+                });
+              }
+              setSelectedItem(null); // Close details modal if open
+              document.body.removeChild(confirmDialog);
+            };
+
+            document.getElementById('confirmNo').onclick = () => {
+              document.body.removeChild(confirmDialog);
+            };
+          };
+
+          // --- Item Details Modal Handlers ---
+          const handleItemClick = (item) => {
+            setSelectedItem(item);
+          };
+
+          const closeDetails = () => {
+            setSelectedItem(null);
+          };
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 p-4 sm:p-6 font-sans text-gray-800 flex flex-col items-center">
+              <script src="https://cdn.tailwindcss.com"></script>
+              <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+              <style>{`
+                body { font-family: 'Inter', sans-serif; }
+                /* Custom scrollbar for detail modal */
+                .custom-scrollbar::-webkit-scrollbar {
+                  width: 8px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                  background: #f1f1f1;
+                  border-radius: 10px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                  background: #888;
+                  border-radius: 10px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                  background: #555;
+                }
+                .whitespace-pre-line {
+                  white-space: pre-line;
+                }
+              `}</style>
+
+              <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 w-full max-w-md md:max-w-lg lg:max-w-xl">
+                <h1 className="text-3xl sm:text-4xl font-bold text-center text-indigo-700 mb-6">
+                  Sculpt & Sprint Daily
+                </h1>
+
+                {/* Navigation Tabs */}
+                <div className="flex justify-around bg-gray-100 rounded-lg p-2 mb-6 shadow-inner">
+                  <button
+                    onClick={() => setCurrentPage('daily')}
+                    className={`flex-1 py-2 px-4 rounded-md text-lg font-semibold transition-colors duration-200 ${currentPage === 'daily' ? 'bg-indigo-500 text-white shadow' : 'text-gray-700 hover:bg-gray-200'}`}
+                  >
+                    Daily Plan
+                  </button>
+                  <button
+                    onClick={() => setCurrentPage('shopping')}
+                    className={`flex-1 py-2 px-4 rounded-md text-lg font-semibold transition-colors duration-200 ${currentPage === 'shopping' ? 'bg-indigo-500 text-white shadow' : 'text-gray-700 hover:bg-gray-200'}`}
+                  >
+                    Shopping Lists
+                  </button>
+                  <button
+                    onClick={() => setCurrentPage('prep')}
+                    className={`flex-1 py-2 px-4 rounded-md text-lg font-semibold transition-colors duration-200 ${currentPage === 'prep' ? 'bg-indigo-500 text-white shadow' : 'text-gray-700 hover:bg-gray-200'}`}
+                  >
+                    Prep Lists
+                  </button>
+                </div>
+
+                {/* General Daily Notes (Visible on Daily Plan Page) */}
+                {currentPage === 'daily' && (
+                  <div className="bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 p-4 rounded-lg mb-6 shadow-sm">
+                      <p className="font-semibold mb-2">Important Daily Notes:</p>
+                      <ul className="list-disc list-inside text-sm space-y-1">
+                          <li>**Hydration:** Aim for more plain water. While Crystal Light provides fluid, pure water is optimal for your goals and avoids artificial sweeteners.</li>
+                          <li>**Sleep:** Aim for 7-9 hours of quality sleep.</li>
+                          <li>**Mindful Eating:** Eat slowly, pay attention to hunger and fullness cues.</li>
+                          <li>**Listen to Body:** Don't push through sharp pain. Rest when needed.</li>
+                          <li>
+                              **Coffee/Energy Drinks Strategy:**
+                              <ul className="list-circle list-inside ml-4 mt-1">
+                                  <li>**Commit to Eating Breakfast:** Your planned breakfasts are essential for nutrition and satiety.</li>
+                                  <li>**Gradual Sugar Reduction for Coffee:** Aim to reduce sugar in your coffee by about 1/4 each week. Your taste buds will adapt!</li>
+                                  <li>**Gradual Milk Reduction/Switch for Coffee:** Gradually reduce milk quantity, or consider switching to skim/low-fat dairy milk over time to reduce calories.</li>
+                                  <li>**Cut Energy Drinks:** These are a significant source of empty calories and sugar. Eliminating them entirely would be a huge win for your weight loss goal.</li>
+                              </ul>
+                          </li>
+                      </ul>
+                  </div>
+                )}
+
+                {/* --- DAILY PLAN VIEW --- */}
+                {currentPage === 'daily' && (
+                  <>
+                    {/* Date Navigation */}
+                    <div className="flex justify-between items-center mb-6">
+                      <button
+                        onClick={goToPreviousDay}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-colors duration-200"
+                      >
+                        &larr; Prev Day
+                      </button>
+                      <div className="text-center">
+                        <p className="text-lg font-semibold text-gray-700">{currentDate.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                        <p className="text-sm text-gray-500">({currentDayPlan.dayOfWeek}'s Plan)</p>
+                      </div>
+                      <button
+                        onClick={goToNextDay}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-colors duration-200"
+                      >
+                        Next Day &rarr;
+                      </button>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
+                      <div
+                        className="bg-green-500 h-3 rounded-full transition-all duration-500"
+                        style={{ width: `${dailyProgressPercentage}%` }}
+                      ></div>
+                    </div>
+                    <p className="text-center text-sm text-gray-600 mb-6">{completedDailyCount} of {totalDailyItems} items completed</p>
+
+                    {/* Checklist */}
+                    <div className="space-y-4">
+                      {currentDayPlan.items.map(item => (
+                        <div
+                          key={item.id}
+                          className="flex items-center bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
+                          onClick={() => handleItemClick(item)}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={dailyCompletedForDate[item.id] || false}
+                            onChange={() => handleDailyCheckboxChange(item.id)}
+                            onClick={(e) => e.stopPropagation()} // Prevent item details from opening when clicking checkbox
+                            className="form-checkbox h-5 w-5 text-green-600 rounded-md transition-colors duration-200 focus:ring-green-500"
+                          />
+                          <span className={`ml-4 text-lg font-medium ${dailyCompletedForDate[item.id] ? 'line-through text-gray-500' : 'text-gray-800'}`}>
+                            {item.name} <span className="text-sm text-gray-400">({item.type})</span>
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Reset Button */}
+                    <div className="mt-8 text-center">
+                      <button
+                        onClick={() => resetProgress('daily', dateKey)}
+                        className="px-6 py-3 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition-colors duration-200 text-lg font-semibold"
+                      >
+                        Reset Today's Progress
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                {/* --- SHOPPING LISTS VIEW --- */}
+                {currentPage === 'shopping' && (
+                  <div className="space-y-8">
+                    {shoppingListsData.map(list => (
+                      <div key={list.id} className="bg-gray-50 p-6 rounded-xl shadow-md">
+                        <div className="flex justify-between items-center mb-4">
+                          <h2 className="text-2xl font-bold text-indigo-600">{list.name}</h2>
+                          <button
+                            onClick={() => resetProgress('shopping', list.id)}
+                            className="px-4 py-2 bg-red-400 text-white text-sm rounded-lg shadow hover:bg-red-500 transition-colors duration-200"
+                          >
+                            Reset This List
+                          </button>
+                        </div>
+                        {list.categories.map(category => (
+                          <div key={category.name} className="mb-4">
+                            <h3 className="text-lg font-semibold text-gray-700 mb-2 border-b border-gray-200 pb-1">{category.name}</h3>
+                            <div className="space-y-2">
+                              {category.items.map(item => (
+                                <div key={item.id} className="flex items-center">
+                                  <input
+                                    type="checkbox"
+                                    checked={shoppingCompleted[list.id]?.[item.id] || false}
+                                    onChange={() => handleShoppingCheckboxChange(list.id, item.id)}
+                                    className="form-checkbox h-5 w-5 text-green-600 rounded-md transition-colors duration-200 focus:ring-green-500"
+                                  />
+                                  <span className={`ml-3 text-base ${shoppingCompleted[list.id]?.[item.id] ? 'line-through text-gray-500' : 'text-gray-800'}`}>
+                                    {item.name}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* --- PREP LISTS VIEW --- */}
+                {currentPage === 'prep' && (
+                  <div className="space-y-8">
+                    {prepListsData.map(list => (
+                      <div key={list.id} className="bg-gray-50 p-6 rounded-xl shadow-md">
+                        <div className="flex justify-between items-center mb-4">
+                          <h2 className="text-2xl font-bold text-indigo-600">{list.name}</h2>
+                          <button
+                            onClick={() => resetProgress('prep', list.id)}
+                            className="px-4 py-2 bg-red-400 text-white text-sm rounded-lg shadow hover:bg-red-500 transition-colors duration-200"
+                          >
+                            Reset This List
+                          </button>
+                        </div>
+                        <div className="space-y-2">
+                          {list.items.map(item => (
+                            <div key={item.id} className="flex items-center">
+                              <input
+                                type="checkbox"
+                                checked={prepCompleted[list.id]?.[item.id] || false}
+                                onChange={() => handlePrepCheckboxChange(list.id, item.id)}
+                                className="form-checkbox h-5 w-5 text-green-600 rounded-md transition-colors duration-200 focus:ring-green-500"
+                              />
+                              <span className={`ml-3 text-base ${prepCompleted[list.id]?.[item.id] ? 'line-through text-gray-500' : 'text-gray-800'}`}>
+                                {item.name}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Item Details Modal */}
+                {selectedItem && (
+                  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                    <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 w-full max-w-md md:max-w-lg lg:max-w-xl max-h-[90vh] overflow-y-auto custom-scrollbar relative">
+                      <button
+                        onClick={closeDetails}
+                        className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                      >
+                        &times;
+                      </button>
+                      <h2 className="text-2xl sm:text-3xl font-bold text-indigo-700 mb-4">{selectedItem.name}</h2>
+                      <p className="text-gray-600 text-sm mb-4">({selectedItem.type})</p>
+
+                      {selectedItem.type === 'Meal' && (
+                        <div className="space-y-4">
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-700 mb-2">Ingredients:</h3>
+                            <p className="text-gray-800 whitespace-pre-line">{selectedItem.details.ingredients}</p>
+                          </div>
+                          {selectedItem.details.prep && (
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-700 mb-2">Preparation:</h3>
+                              <p className="text-gray-800 whitespace-pre-line">{selectedItem.details.prep}</p>
+                            </div>
+                          )}
+                          {selectedItem.details.notes && (
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-700 mb-2">Notes:</h3>
+                              <p className="text-gray-800 whitespace-pre-line">{selectedItem.details.notes}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {selectedItem.type === 'Exercise' && (
+                        <div className="space-y-4">
+                          {selectedItem.details.warmUp && (
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-700 mb-2">Warm-up:</h3>
+                              <p className="text-gray-800 whitespace-pre-line">{selectedItem.details.warmUp}</p>
+                            </div>
+                          )}
+                          {selectedItem.details.workout && (
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-700 mb-2">Workout:</h3>
+                              <p className="text-gray-800 whitespace-pre-line">{selectedItem.details.workout}</p>
+                            </div>
+                          )}
+                          {selectedItem.details.coolDown && (
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-700 mb-2">Cool-down:</h3>
+                              <p className="text-gray-800 whitespace-pre-line">{selectedItem.details.coolDown}</p>
+                            </div>
+                          )}
+                          {selectedItem.details.notes && (
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-700 mb-2">Notes:</h3>
+                              <p className="text-gray-800 whitespace-pre-line">{selectedItem.details.notes}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        }
+
+        export default App;
+    </script>
+</body>
+</html>
+```
